@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
+import * as actionTypes from '../../store/actions.js';
+
 import CounterControl from '../../components/CounterControl/CounterControl';
 import CounterOutput from '../../components/CounterOutput/CounterOutput';
 
@@ -96,7 +98,8 @@ class Counter extends Component {
           />
         </StyledCounterControlWrapper>
         <StyledListWrapper>
-          <StyledButton onClick={this.props.onStoreResult}>
+          <StyledButton
+            onClick={() => this.props.onStoreResult(this.props.ctr)}>
             Store results
           </StyledButton>
           <StyledList>
@@ -116,21 +119,23 @@ class Counter extends Component {
 
 const mapStateToProps = state => {
   return {
-    ctr: state.counter,
-    results: state.results
+    ctr: state.ctr.counter,
+    results: state.rslt.results
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onIncrementCounter: () => dispatch({ type: 'INCREMENT' }),
-    onDecrementCounter: () => dispatch({ type: 'DECREMENT' }),
-    onAddCounter: () => dispatch({ type: 'ADD', payload: { val: 10 } }),
+    onIncrementCounter: () => dispatch({ type: actionTypes.INCREMENT }),
+    onDecrementCounter: () => dispatch({ type: actionTypes.DECREMENT }),
+    onAddCounter: () =>
+      dispatch({ type: actionTypes.ADD, payload: { val: 10 } }),
     onSubstractCounter: () =>
-      dispatch({ type: 'SUBTRACT', payload: { val: 15 } }),
-    onStoreResult: () => dispatch({ type: 'STORE_RESULT' }),
+      dispatch({ type: actionTypes.SUBTRACT, payload: { val: 15 } }),
+    onStoreResult: result =>
+      dispatch({ type: actionTypes.STORE_RESULT, payload: { result: result } }),
     onDeleteResult: id =>
-      dispatch({ type: 'DELETE_RESULT', payload: { resultElId: id } })
+      dispatch({ type: actionTypes.DELETE_RESULT, payload: { resultElId: id } })
   };
 };
 
